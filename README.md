@@ -8,16 +8,9 @@ Le budget alloué aux campagnes de relance et aux codes promotionnels étant lim
 
 *Objectif : Le système CRM enverra automatiquement un e-mail avec un code de réduction aux clients identifiés (prédiction d'absence d'achat), permettant d'optimiser le budget promotionnel en ciblant les clients avec la bonne probabilité.*
 
-## 2. Le choix du modèle et résultats chiffrés
+## 2. Le choix du modèle
 
-Nous avons opté pour une **Régression Logistique**. Le jeu de données propre ne contenant qu'environ 2 500 clients actifs, ce modèle linéaire simple est idéal pour éviter le surapprentissage (overfitting) tout en offrant une excellente interprétabilité (poids des variables) pour le métier.
-
-*(Note : Les résultats ci-dessous seront mis à jour une fois le modèle entraîné sur les données finales).*
-
-| Stratégie | Coût de la campagne | ROI estimé | Précision (sur la cible 1) |
-| :--- | :--- | :--- | :--- |
-| **Baseline (envoi à tous)** | Élevé | Négatif | N/A |
-| **Notre Modèle (Rég. Logistique)** | Réduit | Positif | À définir |
+Nous avons opté pour un modèle de **Régression Logistique**. Le jeu de données final, après nettoyage, ne contenant qu'environ 2 500 clients actifs, ce modèle linéaire simple est idéal. Il permet d'éviter le surapprentissage (overfitting) qui pourrait survenir avec des modèles plus complexes (comme le Random Forest) sur de petits échantillons. De plus, il offre une excellente interprétabilité pour le métier grâce à l'analyse des poids (coefficients) attribués à chaque variable.
 
 ## 3. Comment lancer le projet
 
