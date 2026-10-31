@@ -21,7 +21,7 @@ La description de chaque variable est dans `docs/dictionnaire_variables.pdf`.
 
 **Modèle :** régression logistique. Elle donne pour chaque client la probabilité de ne pas racheter. Elle est simple et ses poids se lisent. Une forêt aléatoire et un gradient boosting donnent des résultats proches (AUC autour de 0,74), le modèle le plus simple est donc gardé.
 
-**Découpage :** 80 % des clients pour l'entraînement, 20 % pour le test, avec la même part de churn dans chaque jeu. La graine est fixée (42). Le seuil de décision est choisi sur l'entraînement, le test sert uniquement à mesurer.
+**Découpage :** 80 % des clients pour l'entraînement, 20 % pour le test, avec la même part de churn dans chaque jeu. La graine est fixée (42). Le test sert uniquement à mesurer les résultats.
 
 **Règle de décision.** Les valeurs ci-dessous sont des hypothèses (fichier `backend/config.py`) :
 
@@ -44,11 +44,11 @@ Mesurés sur les 519 clients du jeu de test :
 | | Envoyer à tous (référence) | Règle « dernier achat » | Régression logistique |
 |---|---|---|---|
 | AUC | non applicable | 0,61 | **0,74** |
-| Clients contactés | 519 | non applicable | 260 |
-| Part des contactés qui ne rachètent pas | 57 % | non applicable | 74 % |
-| Gain espéré | −720 £ | non applicable | **+280 £** |
+| Clients contactés | 519 | non applicable | 224 |
+| Part des contactés qui ne rachètent pas | 57 % | non applicable | 75 % |
+| Gain espéré | −720 £ | non applicable | **+295 £** |
 
-Le seuil retenu sur l'entraînement est de 0,62. L'AUC vaut 0,5 pour le hasard et 1 pour un classement parfait. Le gain espéré applique les hypothèses du paragraphe 3 : ce n'est pas un gain mesuré sur de vrais envois.
+Les résultats utilisent le seuil de rentabilité de 66,7 % et les hypothèses par défaut du paragraphe 3, comme l'application. Un seuil cherché par essais sur les clients d'entraînement donne 0,62, proche de cette valeur. L'AUC vaut 0,5 pour le hasard et 1 pour un classement parfait. Le gain espéré applique les hypothèses : ce n'est pas un gain mesuré sur de vrais envois.
 
 ## 5. Lancer le projet
 
