@@ -262,7 +262,7 @@ elif page == PAGES[2]:
 # ================================================================ 4. LE MODÈLE
 elif page == PAGES[3]:
     st.header("Le modèle")
-    st.write("Le modèle est une régression logistique. Elle calcule, pour chaque client, la probabilité "
+    st.write("Le modèle est une régression logistique. Il calcule, pour chaque client, la probabilité "
              "de ne pas racheter dans les 30 jours à partir de son historique d'achats.")
 
     st.subheader("1. Performances sur des clients jamais vus")
@@ -318,8 +318,8 @@ elif page == PAGES[3]:
         f"- Le coût du code ({cout_promo:.0f} {DEVISE}), l'achat futur ({valeur_retenue:.0f} {DEVISE}) et le taux de "
         "réussite sont des hypothèses, pas des mesures. Le modèle prédit qui risque de partir, "
         "pas si le code les fera rester.\n"
-        f"- Le test ne compte que {m['nb_test'] if m else 'quelques centaines de'} clients : les gains en euros "
-        "peuvent varier de plusieurs dizaines d'euros d'un tirage à l'autre.\n"
+        f"- Le test ne compte que {m['nb_test'] if m else 'quelques centaines de'} clients : les gains en {DEVISE} "
+        f"peuvent varier de plusieurs dizaines de {DEVISE} d'un tirage à l'autre.\n"
         "- Seuls les clients identifiés (environ 25 % des lignes d'origine n'ont pas de numéro de client) "
         "et actifs sur les 90 derniers jours sont pris en compte.\n"
         "- Le modèle ne voit que le comportement d'achat : pas d'âge, de revenu ni de motif de départ.")
