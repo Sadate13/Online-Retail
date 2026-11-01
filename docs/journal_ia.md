@@ -1,6 +1,6 @@
 # Journal d'usage de l'IA
 
-Exemple de journal pour le projet Online Retail. Le code final est réel : chaque ligne renvoie à un fichier de ce dépôt. Les prompts et les réponses de l'IA sont reconstitués.
+Journal d’usage de l’IA du projet Online Retail. Chaque ligne renvoie à un fichier de ce dépôt. Les prompts sont résumés.
 Outils utilisés : Claude code
 
 | # | Fichier ou étape | Le prompt (résumé) | Ce que l'IA a produit | Gardé | Corrigé, et pourquoi | Refusé, et pourquoi |
@@ -13,5 +13,5 @@ Outils utilisés : Claude code
 
 ### Bilan en 3 lignes
 - **Ce que l'IA nous a fait gagner :** le squelette de l'application Streamlit et la structure d'intégration de la base SQLite, codés en quelques minutes.
-- **L'erreur qui nous aurait coûté le plus cher :** l'optimisation du seuil de décision sur le jeu de test (fuite de données). Le modèle affichait un gain illusoire de près de 10 000 €, que nous aurions validé à tort.
+- **L'erreur qui nous aurait coûté le plus cher :** l'optimisation du seuil de décision sur le jeu de test (fuite de données). Le modèle affichait un gain illusoire de près de 10 000 £, que nous aurions validé à tort.
 - **Ce que nous ne lui confierions pas sans relecture :** le calibrage des probabilités. L'IA a initialement faussé les prédictions avec une pondération artificielle et cherché un seuil empirique au lieu d'appliquer la stricte équation des coûts du client.
