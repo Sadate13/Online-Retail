@@ -21,7 +21,7 @@ La description de chaque variable est dans `docs/dictionnaire_variables.pdf`.
 
 **Modèle :** régression logistique. Elle donne pour chaque client la probabilité de ne pas racheter. Elle est simple et ses poids se lisent. Une forêt aléatoire et un gradient boosting donnent des résultats proches (AUC autour de 0,74), le modèle le plus simple est donc gardé.
 
-**Découpage :** 80 % des clients pour l'entraînement, 20 % pour le test, avec la même part de churn dans chaque jeu. La graine est fixée (42). Le test sert uniquement à mesurer les résultats.
+**Découpage :** 80 % des clients pour l'entraînement, 20 % pour le test, avec la même part de churn dans chaque jeu. La graine est fixée (42). Une validation croisée en 5 parties sur les 80 % d’entraînement donne une AUC de 0,73 ± 0,02 : le résultat est stable. Le test sert uniquement à mesurer les résultats.
 
 **Règle de décision.** Les valeurs ci-dessous sont des hypothèses (fichier `backend/config.py`) :
 
@@ -44,6 +44,7 @@ Mesurés sur les 519 clients du jeu de test :
 | | Envoyer à tous (référence) | Règle « dernier achat » | Régression logistique |
 |---|---|---|---|
 | AUC | non applicable | 0,61 | **0,75** |
+| AUC en validation croisée (5 parties) | non applicable | non applicable | 0,73 ± 0,02 |
 | Clients contactés | 519 | non applicable | 224 |
 | Part des contactés qui ne rachètent pas | 57 % | non applicable | 76 % |
 | Gain espéré | −720 £ | non applicable | **+310 £** |

@@ -5,7 +5,7 @@ Lancement : python -m backend.train
 import pandas as pd
 import numpy as np
 import joblib
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
 from sklearn.metrics import roc_auc_score
 from backend.config import DATA_PATH, MODEL_SAVE_PATH, RANDOM_SEED, SEUIL_THEORIQUE
 from backend.model import creer_pipeline, calculer_gain_metier, optimiser_seuil
@@ -26,7 +26,13 @@ def entrainer():
         X, y, test_size=0.2, random_state=RANDOM_SEED, stratify=y
     )
 
-    print("3. Entraînement de la Régression Logistique (Pipeline complet)...")
+    print("3. Validation croisée en 5 parties (sur l'entraînement uniquement)...")
+    decoupage = StratifiedKFold(n_splits=5, shuffle=True, random_state=RANDOM_SEED)
+    auc_cv = cross_val_score(creer_pipeline(colonnes_numeriques, colonnes_categorielles),
+                             X_train, y_train, cv=decoupage, scoring="roc_auc")
+    print(f"AUC en validation croisée : {auc_cv.mean():.2f} ± {auc_cv.std():.2f}")
+
+    print("4. Entraînement de la Régression Logistique (Pipeline complet)...")
     pipeline = creer_pipeline(colonnes_numeriques, colonnes_categorielles)
     pipeline.fit(X_train, y_train)
 
@@ -55,6 +61,8 @@ def entrainer():
     metriques = {
         'auc_test': float(roc_auc_score(y_test, probabilites_test)),
         'auc_reference_recence': float(roc_auc_score(y_test, X_test['recence_jours'])),
+        'auc_cv_moyenne': float(auc_cv.mean()),
+        'auc_cv_ecart_type': float(auc_cv.std()),
         'gain_baseline': float(gain_baseline),
         'gain_modele': float(gain_modele),
         'nb_test': int(len(y_test)),
