@@ -13,7 +13,7 @@ Le but est de leur envoyer en priorité un code de réduction par e-mail, avec u
 - **Cible (`churn`) :** 1 si le client n'achète rien entre le 10 novembre et le 9 décembre 2011, 0 sinon.
 - **Base finale :** une ligne par client, 2 592 clients actifs, dont 57,5 % avec `churn = 1`.
 
-Nettoyage : sur 541 909 lignes, 391 009 sont conservées. Sont retirées les lignes sans numéro de client, les annulations, les prix ou quantités invalides, et les frais qui ne sont pas des produits.
+Nettoyage : sur 541 909 lignes, 391 009 sont conservées. Sont retirées les lignes sans numéro de client, les annulations, les prix ou quantités invalides, et les frais qui ne sont pas des produits. Le détail, chiffré, est dans docs/data_quality_card.md.
 
 La description de chaque variable est dans `docs/dictionnaire_variables.pdf`.
 
@@ -58,8 +58,8 @@ Python 3.10 ou plus, dans un environnement virtuel activé. La base `data/base_c
 ```bash
 pip install -r requirements.txt
 python -m backend.train
-pytest
-streamlit run frontend/app.py
+python -m pytest
+python -m streamlit run frontend/app.py
 ```
 
 L'application a quatre écrans : Décision (un client), Campagne (liste des clients à contacter), Exploration (graphiques) et Le modèle (performances, variables, limites).
@@ -91,3 +91,14 @@ requirements.txt    versions fixées
 - Environ un quart des lignes d'origine n'ont pas de numéro de client et sont exclues. Seuls les clients actifs (achat dans les 90 jours) sont pris en compte.
 - Le modèle utilise uniquement le comportement d'achat : il n'y a pas d'âge, de revenu ni de raison de départ.
 - Les données couvrent un an : il n'y a pas de test sur une autre année.
+- 5 192 lignes en double exact (1,3 %) ne sont pas retirées. Les retirer ne change ni l'AUC (0,75) ni le nombre de codes (224), mais le gain espéré passerait de +310 £ à +295 £.
+- Le jeu de données n'a qu'une table : le chargement et le nettoyage sont faits en SQL (SQLite), mais aucune jointure n'était nécessaire. Le comptage des annulations par client est fait en pandas.
+- Le pays est utilisé par le modèle. Sur le test, les clients hors Royaume-Uni sont moins souvent ciblés (31 % contre 44 %) alors qu'ils partent un peu plus. C'est à surveiller (51 clients seulement), voir `docs/model_card.md`.
+
+## 8. Retours du COMEX et changements
+
+À compléter après la soutenance : chaque retour reçu, et ce que nous avons changé.
+
+| Retour du COMEX | Ce que nous avons changé |
+|---|---|
+| | |
