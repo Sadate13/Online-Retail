@@ -9,3 +9,6 @@ __pycache__/
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Base SQLite recréée par backend/data.py
+data/database.sqlite
