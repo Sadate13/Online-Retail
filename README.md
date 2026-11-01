@@ -43,10 +43,10 @@ Mesurés sur les 519 clients du jeu de test :
 
 | | Envoyer à tous (référence) | Règle « dernier achat » | Régression logistique |
 |---|---|---|---|
-| AUC | non applicable | 0,61 | **0,74** |
+| AUC | non applicable | 0,61 | **0,75** |
 | Clients contactés | 519 | non applicable | 224 |
-| Part des contactés qui ne rachètent pas | 57 % | non applicable | 75 % |
-| Gain espéré | −720 £ | non applicable | **+295 £** |
+| Part des contactés qui ne rachètent pas | 57 % | non applicable | 76 % |
+| Gain espéré | −720 £ | non applicable | **+310 £** |
 
 Les résultats utilisent le seuil de rentabilité de 66,7 % et les hypothèses par défaut du paragraphe 3, comme l'application. Un seuil cherché par essais sur les clients d'entraînement donne 0,62, proche de cette valeur. L'AUC vaut 0,5 pour le hasard et 1 pour un classement parfait. Le gain espéré applique les hypothèses : ce n'est pas un gain mesuré sur de vrais envois.
 

@@ -276,13 +276,20 @@ elif page == PAGES[3]:
         c2.metric("AUC de la règle « dernier achat »", f"{m['auc_reference_recence']:.2f}")
         c3.metric("Gain espéré : envoi à tous", montant(m["gain_baseline"]))
         c4.metric("Gain espéré : modèle", montant(m["gain_modele"]))
-        st.write(f"Le test porte sur {m['nb_test']} clients. Avec un seuil de {m['seuil_optimal']:.0%}, "
+        st.write(f"Le test porte sur {m['nb_test']} clients. Avec le seuil de rentabilité de {m['seuil_optimal']:.1%}, "
                  f"le modèle cible {m['nb_clients_cibles']} clients, dont "
                  f"{m['part_vrais_partants_cibles']:.0%} ne rachètent vraiment pas "
                  f"(contre {m['taux_churn_test']:.0%} dans l'ensemble des clients).")
         st.caption("L'AUC mesure si le modèle place un client qui part au-dessus d'un client qui reste : "
                    "0,5 correspond au hasard, 1 à un classement parfait. Les gains sont calculés avec les "
-                   "hypothèses par défaut, pas avec celles de la barre latérale.")
+                   f"hypothèses par défaut ({hyp['cout_promo']:.0f} {DEVISE} de coût, {hyp['valeur_retenue']:.0f} {DEVISE} "
+                   f"d'achat futur, {hyp['taux_succes']:.0%} de réussite), pas avec celles de la barre latérale.")
+        if m.get("seuil_empirique_train"):
+            st.caption(f"Pour comparaison, un seuil cherché par essais sur les clients d'entraînement donne "
+                       f"{m['seuil_empirique_train']:.2f}, proche du seuil de rentabilité.")
+        if (taux_succes, cout_promo, valeur_retenue) != (hyp["taux_succes"], hyp["cout_promo"], hyp["valeur_retenue"]):
+            st.info("Les hypothèses de la barre latérale ont été modifiées : les résultats de cette partie "
+                    "restent ceux des hypothèses par défaut.")
 
     st.subheader("2. Variables les plus importantes")
     coefs = charger_coefficients()
