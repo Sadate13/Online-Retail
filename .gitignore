@@ -1,0 +1,11 @@
+# Environnement Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Systeme et editeur
+.DS_Store
+Thumbs.db
+.vscode/
