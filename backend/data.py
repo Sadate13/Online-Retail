@@ -1,15 +1,16 @@
-import sqlite3
-import pandas as pd
-import numpy as np
+"""
+Préparation des données : fichier Excel brut -> SQLite -> table d'analyse (une ligne par client).
+Lancement : python -m backend.data
+"""
 import re
+import sqlite3
 import unicodedata
-import sys
-import os
 
-# --- Variables globales ---
-FENETRE_JOURS = 30
-DATE_COUPURE = pd.Timestamp("2011-11-09")
-JOURS_ACTIF = 90
+import numpy as np
+import pandas as pd
+
+from backend.config import (DATE_COUPURE, DOSSIER_DONNEES, DOSSIER_SQL, FENETRE_JOURS,
+                            FICHIER_BRUT, FICHIER_SQLITE, JOURS_ACTIF)
 
 CODES_SERVICES = {"POST", "DOT", "M", "m", "D", "C2", "S", "B", "BANK CHARGES", "AMAZONFEE", "CRUK", "PADS", "ADJUST", "ADJUST2"}
 
@@ -51,7 +52,7 @@ def nom_colonne(c):
     c = unicodedata.normalize("NFKD", c).encode("ascii", "ignore").decode()
     return "part_" + c.lower().replace(" ", "_").replace(",", "").replace("'", "")
 
-def build_data(chemin_entree="data/raw/Online Retail.xlsx", dossier_sortie="data/"):
+def build_data(chemin_entree=FICHIER_BRUT, dossier_sortie=DOSSIER_DONNEES):
     """Orchestre la création de la table d'analyse via SQLite et Pandas."""
     
     print("1. Lecture du fichier Excel...")
@@ -66,18 +67,17 @@ def build_data(chemin_entree="data/raw/Online Retail.xlsx", dossier_sortie="data
     
     # --- TRANSITION OBLIGATOIRE PAR SQLITE ---
     print("2. Chargement dans SQLite...")
-    db_path = os.path.join(dossier_sortie, "database.sqlite")
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(FICHIER_SQLITE)
     
     # On exécute d'abord la création de la table brute
-    with open("backend/sql/load_data.sql", "r", encoding="utf-8") as f:
+    with open(DOSSIER_SQL / "load_data.sql", "r", encoding="utf-8") as f:
         conn.executescript(f.read())
         
     # Envoi des données brutes vers SQLite
     brut.to_sql("online_retail_raw", conn, if_exists="replace", index=False)
     
     # Exécution de la création de la vue propre
-    with open("backend/sql/create_features.sql", "r", encoding="utf-8") as f:
+    with open(DOSSIER_SQL / "create_features.sql", "r", encoding="utf-8") as f:
         conn.executescript(f.read())
     
     print("3. Récupération des données nettoyées depuis SQLite...")
@@ -149,7 +149,7 @@ def build_data(chemin_entree="data/raw/Online Retail.xlsx", dossier_sortie="data
     clients = clients.drop(columns=["premier_achat", "dernier_achat"])
 
     print("5. Sauvegarde de la base clients...")
-    clients.to_csv(f"{dossier_sortie}/base_clients_modelisation.csv", index=False, encoding="utf-8")
+    clients.to_csv(dossier_sortie / "base_clients_modelisation.csv", index=False, encoding="utf-8")
     print(f"Terminé ! Table finale générée : {clients.shape} dans {dossier_sortie}")
 
 if __name__ == "__main__":

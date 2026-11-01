@@ -2,9 +2,13 @@
 Service métier (API interne).
 Seule interface autorisée à être appelée par le frontend (app.py).
 """
-import pandas as pd
+from functools import lru_cache
+
 import joblib
-import os
+import numpy as np
+import pandas as pd
+
+from backend import config
 from backend.config import DATA_PATH, MODEL_SAVE_PATH
 
 # Variable globale pour stocker le modèle en mémoire sans le recharger à chaque clic
@@ -14,60 +18,10 @@ def _charger_modele():
     """Charge le modèle en mémoire s'il n'y est pas déjà."""
     global _modele_data
     if _modele_data is None:
-        if not os.path.exists(MODEL_SAVE_PATH):
+        if not MODEL_SAVE_PATH.exists():
             raise FileNotFoundError(f"Le modèle {MODEL_SAVE_PATH} est introuvable. Lancez 'python -m backend.train'.")
         _modele_data = joblib.load(MODEL_SAVE_PATH)
     return _modele_data
-
-def get_client_info(customer_id):
-    """Récupère les informations brutes d'un client depuis la base."""
-    try:
-        df = pd.read_csv(DATA_PATH)
-        client = df[df['CustomerID'] == int(customer_id)]
-        if client.empty:
-            return None
-        return client
-    except Exception as e:
-        print(f"Erreur de lecture des données: {e}")
-        return None
-
-def predict_client(customer_id):
-    """
-    Fait une prédiction de churn pour un client donné.
-    Retourne un dictionnaire avec la probabilité, le seuil et l'action recommandée.
-    """
-    try:
-        modele_data = _charger_modele()
-        pipeline = modele_data['pipeline']
-        seuil_optimal = modele_data['seuil_optimal']
-        colonnes_entrainement = modele_data['colonnes_entrainement']
-    except Exception as e:
-        return {"erreur": f"Erreur lors du chargement du modèle : {str(e)}"}
-
-    # 1. Récupérer les données du client
-    client_data = get_client_info(customer_id)
-    if client_data is None:
-        return {"erreur": f"Le client ID {customer_id} est introuvable dans la base active."}
-
-    # 2. Préparer les données
-    # On gère les valeurs nulles comme lors de l'entraînement
-    client_data['intervalle_moyen_jours'] = client_data['intervalle_moyen_jours'].fillna(0)
-    X_client = client_data[colonnes_entrainement]
-
-    # 3. Faire la prédiction
-    proba_churn = pipeline.predict_proba(X_client)[0][1] # Probabilité de la classe 1 (Churn)
-    
-    # 4. Appliquer la règle de décision basée sur le seuil métier
-    prediction = 1 if proba_churn >= seuil_optimal else 0
-
-    return {
-        "erreur": None,
-        "customer_id": customer_id,
-        "proba_churn": proba_churn,
-        "seuil_optimal": seuil_optimal,
-        "prediction": prediction,
-        "action": "ENVOYER CODE PROMO" if prediction == 1 else "NE RIEN ENVOYER"
-    }
 
 def get_all_clients():
     """Récupère l'ensemble de la base clients pour l'exploration globale."""
@@ -80,13 +34,6 @@ def get_all_clients():
 
 
 # =====================================================================
-from functools import lru_cache
-
-import numpy as np
-import pandas as pd
-
-from backend import config
-
 COLONNES_PROFIL = ["recence_jours", "nb_factures", "depense_totale", "panier_moyen",
                    "anciennete_jours", "nb_factures_90j", "categorie_principale", "pays"]
 
