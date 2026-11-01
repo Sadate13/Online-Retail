@@ -13,7 +13,7 @@ Le but est de leur envoyer en priorité un code de réduction par e-mail, avec u
 - **Cible (`churn`) :** 1 si le client n'achète rien entre le 10 novembre et le 9 décembre 2011, 0 sinon.
 - **Base finale :** une ligne par client, 2 592 clients actifs, dont 57,5 % avec `churn = 1`.
 
-Nettoyage : sur 541 909 lignes, 391 009 sont conservées. Sont retirées les lignes sans numéro de client, les annulations, les doublons, les prix ou quantités invalides, et les frais qui ne sont pas des produits.
+Nettoyage : sur 541 909 lignes, 391 009 sont conservées. Sont retirées les lignes sans numéro de client, les annulations, les prix ou quantités invalides, et les frais qui ne sont pas des produits.
 
 La description de chaque variable est dans `docs/dictionnaire_variables.pdf`.
 
@@ -76,7 +76,7 @@ backend/            logique métier, aucun import de Streamlit
   service.py        seule interface appelée par le frontend
 frontend/app.py     application Streamlit : affichage et saisie uniquement
 tests/              tests pytest
-docs/               note de cadrage, Data Quality Card, Model Card, note de synthèse,
+docs/               Data Quality Card, Model Card, note de synthèse,
                     slides, journal d'usage de l'IA, dictionnaire des variables
 data/raw/           données brutes, jamais modifiées
 data/               base d'analyse base_clients_modelisation.csv
